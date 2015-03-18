@@ -1,0 +1,101 @@
+/*
+ * Copyright(C) 2014-2015 Yutaka Kato All rights reserved.
+ */
+
+body {
+	background-color: white;
+}
+
+p.error {
+	color: red;
+}
+
+#wrapper {
+	margin: 0 auto;
+    padding: 10px 0px;
+    background : white;
+    min-width: 300px;
+    max-width: 500px;
+    background: white;
+    text-align: center;
+}
+
+#wrapper h1 {
+	margin: 0 auto;
+	text-align: center;
+	font-size: 0;
+	line-height: 50px;
+	background: url('logo.png') 50% 50% no-repeat;
+}
+
+#wrapper h2 {
+	font-family: serif;
+}
+#wrapper h2.yes {
+	color: seagreen;
+}
+#wrapper h2.no {
+	color: brown;
+}
+
+#wrapper form p {
+	margin-bottom: 3px;
+}
+
+#wrapper input[type="text"] {
+	margin-top: 0;
+	width: 50%;
+}
+
+#wrapper input[type="submit"] {
+	margin-top: 20px;
+	width: 50%;
+}
+
+#wrapper dt {
+	margin: 0;
+	font-weight: bold;
+}
+
+#wrapper dd {
+	margin: 3px 0 10px 0;
+}
+
+#wrapper .ornot {
+	font-size: 10pt;
+}
+
+#footer {
+	margin-top: 30px;
+}
+
+#footer p {
+	font-size: 8pt;
+	color: dimgray;
+}
+
+#navi {
+	margin-top: 15px;
+}
+
+table {
+	margin: 0 auto;
+}
+tr:nth-child(2n+1) {
+    background-color: whitesmoke;
+}
+th {
+	background-color: silver;
+	padding: 5px;
+}
+td {
+	padding: 3px 5px;
+}
+td.yes {
+	color: white;
+	background-color: seagreen;
+}
+td.no {
+	color: white;
+	background-color: brown;
+}
