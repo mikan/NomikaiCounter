@@ -14,6 +14,10 @@ import ceylon.io.charset {
 	getCharset,
 	Charset
 }
+import ceylon.net.http {
+
+	Header
+}
 
 "Base of controllers."
 by ("Yutaka Kato")
@@ -21,6 +25,7 @@ shared abstract class Controller() {
 	
 	"Handle requests."
 	shared void handle(Request request, Response response) {
+		response.addHeader(Header("Content-Type", "text/html; charset=UTF-8"));
 		switch (request.method.string)
 		case ("GET") {
 			handleGet(request, response);
