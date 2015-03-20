@@ -37,6 +37,10 @@ shared class NewController() extends Controller() {
 		assert (exists subject = request.parameter("subject"));
 		assert (exists description = request.parameter("description"));
 		assert (exists deadline = request.parameter("deadline"));
+		if (!isValidText(name) || !isValidText(subject) || !isValidText(description) || !isValidText(deadline)) {
+			NodeSerializer(response.writeString).serialize(ErrorView("Illegal character(s) contained.").getHtml(request));
+			return;
+		}
 		Session session = Session();
 		session.author = iso2unicode(name);
 		session.subject = iso2unicode(subject);

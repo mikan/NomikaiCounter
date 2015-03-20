@@ -15,7 +15,6 @@ import ceylon.io.charset {
 	Charset
 }
 import ceylon.net.http {
-
 	Header
 }
 
@@ -62,5 +61,13 @@ shared abstract class Controller() {
 			}
 		}
 		return utf8.decode(iso_8859_1.encode(iso));
+	}
+	
+	"Check contains illegal characters."
+	shared Boolean isValidText(String source) {
+		return !(source.contains("<") || source.contains(">")
+					|| source.contains("{") || source.contains("}")
+					|| source.contains("[") || source.contains("]")
+					|| source.contains("\"") || source.contains("\'"));
 	}
 }
