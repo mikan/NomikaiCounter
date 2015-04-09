@@ -53,6 +53,16 @@ shared class YesController() extends Controller() {
 		assert (exists String name = request.parameter("name"));
 		assert (exists String action = request.parameter("action"));
 		assert (exists String message = request.parameter("message"));
+		if (name.empty) {
+			NodeSerializer(response.writeString).serialize(
+				ErrorView("Name is empty.").getHtml(request));
+			return;
+		}
+		if (action.empty) {
+			NodeSerializer(response.writeString).serialize(
+				ErrorView("Action is empty.").getHtml(request));
+			return;
+		}
 		Session? session = repository.findSessionById(sessionId);
 		if (exists session) {
 			Session.Post post = session.createPost(
