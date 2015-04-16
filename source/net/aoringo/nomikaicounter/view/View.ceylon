@@ -11,18 +11,22 @@ import ceylon.html {
 import ceylon.net.http.server {
 	Request
 }
+import net.aoringo.nomikaicounter {
+
+	Configuration
+}
 
 "Base of pages."
 by ("Yutaka Kato")
 shared abstract class View() {
 	
-	String _title = "Nomikai Counter";
-	String path = "/resource/";
+	Configuration conf = Configuration();
+	String path = conf.resourceDir;
 	String jqPath = path + "jquery/";
-	String jquiPath = path + "jqueryui/";
+	String jqUiPath = path + "jqueryui/";
 	
 	"Getter of title."
-	shared String title => _title;
+	shared String title => conf.title;
 	
 	"Create head element with specified title."
 	shared Head head(String title) {
@@ -30,9 +34,9 @@ shared abstract class View() {
 			title = title;
 			CharsetMeta("utf-8"),
 			Link("StyleSheet", path + "main.css", LinkType("text/css")),
-			Link("StyleSheet", jquiPath + "jquery-ui.min.css", LinkType("text/css")),
+			Link("StyleSheet", jqUiPath + "jquery-ui.min.css", LinkType("text/css")),
 			Script(jqPath + "jquery-1.11.2.min.js"),
-			Script(jquiPath + "jquery-ui.min.js"),
+			Script(jqUiPath + "jquery-ui.min.js"),
 			Script(path + "main.js")
 		};
 	}
@@ -40,14 +44,14 @@ shared abstract class View() {
 	shared Div footer() {
 		return Div {
 			id = "footer";
-			P("Copyright&copy; 2014-2015 Yutaka Kato"),
-			P("Written in Ceylon language")
+			P(conf.versionLabel),
+			P(conf.copyright)
 		};
 	}
 	
 	shared String textOrEmptyMessage(String source) {
 		if (source.empty) {
-			return "(なし)";
+			return "(empty)";
 		}
 		return source;
 	}
