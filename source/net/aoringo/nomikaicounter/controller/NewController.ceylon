@@ -10,7 +10,6 @@ import net.aoringo.nomikaicounter.model.mongo {
 }
 import net.aoringo.nomikaicounter.view {
 	NewView,
-	ErrorView,
 	SessionView
 }
 import net.aoringo.nomikaicounter.model {
@@ -38,7 +37,7 @@ shared class NewController() extends Controller() {
 		assert (exists description = request.parameter("description"));
 		assert (exists deadline = request.parameter("deadline"));
 		if (!isValidText(name) || !isValidText(subject) || !isValidText(description) || !isValidText(deadline)) {
-			NodeSerializer(response.writeString).serialize(ErrorView("Illegal character(s) contained.").getHtml(request));
+			showError(request, response, "Illegal character(s) contained.");
 			return;
 		}
 		Session session = Session();
@@ -53,7 +52,7 @@ shared class NewController() extends Controller() {
 			Session? duplicateCheck = repository.findSessionBySessionObject(session);
 			if (exists duplicateCheck) {
 				print("[new] session duplicated!");
-				NodeSerializer(response.writeString).serialize(ErrorView("Session already found.").getHtml(request));
+				showError(request, response, "Session already found.");
 				return;
 			} else {
 				print("[new] ready to insert");
@@ -68,7 +67,7 @@ shared class NewController() extends Controller() {
 		if (exists inserted) {
 			NodeSerializer(response.writeString).serialize(SessionView(inserted).getHtml(request));
 		} else {
-			NodeSerializer(response.writeString).serialize(ErrorView("Insert failed.").getHtml(request));
+			showError(request, response, "Insert failed.");
 		}
 	}
 }

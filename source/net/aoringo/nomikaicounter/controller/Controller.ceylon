@@ -70,4 +70,10 @@ shared abstract class Controller() {
 					|| source.contains("[") || source.contains("]")
 					|| source.contains("\"") || source.contains("\'"));
 	}
+	
+	"Show error view."
+	shared void showError(Request request, Response response, String message) {
+		print("[controller] Showing error: " + message);
+		NodeSerializer(response.writeString).serialize(ErrorView(message).getHtml(request));
+	}
 }

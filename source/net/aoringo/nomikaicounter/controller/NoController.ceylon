@@ -4,7 +4,6 @@ import ceylon.net.http.server {
 }
 import net.aoringo.nomikaicounter.view {
 	NoView,
-	ErrorView,
 	SuccessView
 }
 import ceylon.html.serializer {
@@ -29,22 +28,18 @@ shared class NoController() extends Controller() {
 	shared actual void handleGet(Request request, Response response) {
 		String id = getId(request.path);
 		if (id.empty) {
-			NodeSerializer(response.writeString).serialize(
-				ErrorView("Missing ID.").getHtml(request));
+			showError(request, response, "Missing ID.");
 			return;
 		}
-		SessionRepository repo = MongoSessionRepository();
-		if (!repo.isValid(id)) {
-			NodeSerializer(response.writeString).serialize(
-				ErrorView("Illegal ID: " + id).getHtml(request));
+		if (!repository.isValid(id)) {
+			showError(request, response, "Illegal ID: " + id);
 			return;
 		}
-		Session? session = repo.findSessionById(id);
+		Session? session = repository.findSessionById(id);
 		if (exists session) {
 			NodeSerializer(response.writeString).serialize(NoView(session).getHtml(request));
 		} else {
-			NodeSerializer(response.writeString).serialize(
-				ErrorView("Session not found.").getHtml(request));
+			showError(request, response, "Session not found.");
 		}
 	}
 	
@@ -53,16 +48,25 @@ shared class NoController() extends Controller() {
 		assert (exists String name = request.parameter("name"));
 		assert (exists String action = request.parameter("action"));
 		assert (exists String message = request.parameter("message"));
+		
+		// Check parameters
 		if (name.empty) {
-			NodeSerializer(response.writeString).serialize(
-				ErrorView("Name is empty.").getHtml(request));
+			showError(request, response, "Name is empty.");
+			return;
+		} else if (!isValidText(name)) {
+			showError(request, response, "Name contains illegal character.");
+			return;
+		} else if (action.empty) {
+			showError(request, response, "Action is empty.");
+			return;
+		} else if (!isValidText(action)) {
+			showError(request, response, "Action contains illegal character.");
+			return;
+		} else if (!isValidText(message)) {
+			showError(request, response, "Message contains illegal character.");
 			return;
 		}
-		if (action.empty) {
-			NodeSerializer(response.writeString).serialize(
-				ErrorView("Action is empty.").getHtml(request));
-			return;
-		}
+		
 		Session? session = repository.findSessionById(sessionId);
 		if (exists session) {
 			Session.Post post = session.createPost(
@@ -72,8 +76,7 @@ shared class NoController() extends Controller() {
 			repository.addPost(session, post);
 			NodeSerializer(response.writeString).serialize(SuccessView().getHtml(request));
 		} else {
-			NodeSerializer(response.writeString).serialize(
-				ErrorView("Session not found.").getHtml(request));
+			showError(request, response, "Session not found.");
 		}
 	}
 }

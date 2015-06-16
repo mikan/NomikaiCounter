@@ -6,8 +6,7 @@ import ceylon.net.http.server {
 	Response
 }
 import net.aoringo.nomikaicounter.view {
-	SessionView,
-	ErrorView
+	SessionView
 }
 import net.aoringo.nomikaicounter.model.mongo {
 	MongoSessionRepository
@@ -26,22 +25,19 @@ shared class SessionController() extends Controller() {
 	shared actual void handleGet(Request request, Response response) {
 		String id = getId(request.path);
 		if (id.empty) {
-			NodeSerializer(response.writeString).serialize(
-				ErrorView("Missing ID.").getHtml(request));
+			showError(request, response, "Missing ID.");
 			return;
 		}
 		SessionRepository repo = MongoSessionRepository();
 		if (!repo.isValid(id)) {
-			NodeSerializer(response.writeString).serialize(
-				ErrorView("Illegal ID: " + id).getHtml(request));
+			showError(request, response, "Illegal ID: " + id);
 			return;
 		}
 		Session? session = repo.findSessionById(id);
 		if (exists session) {
 			NodeSerializer(response.writeString).serialize(SessionView(session).getHtml(request));
 		} else {
-			NodeSerializer(response.writeString).serialize(
-				ErrorView("Session not found.").getHtml(request));
+			showError(request, response, "Session not found.");
 		}
 	}
 	
