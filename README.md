@@ -6,6 +6,6 @@ This project was discontinued. New project is here:
 
 > mikan/nomikai-counter
 > 
-> https://github.com/mikan/nomikai-counter repository
+> https://github.com/mikan/nomikai-counter
 
 It was fully-rewroute by Kotlin language with Spring Boot.
